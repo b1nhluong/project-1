@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mô Hình Kruskal Trực Quan</title>
+    <title>Kruskal's Algorithm Visualization</title>
     <link rel="stylesheet" href="css/style.css">
     
     <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
@@ -11,26 +11,28 @@
 <body>
 
     <header>
-        <h1>Kruskal's Algorithm Visualization</h1>
+        <h1>🌟 Kruskal's Algorithm Visualization</h1>
         <div id="controls">
-            <label class="file-input-label">
-                <input type="file" id="fileInput" accept=".txt" onchange="handleFileSelect()">
-                <span>Import Input</span>
-            </label>
+            
+            <button id="importButton" onclick="triggerFileInput()">
+                📥 Import Input
+            </button>
+            
+            <input type="file" id="fileInput" accept=".txt" onchange="handleFileSelect()" style="display: none;">
             
             <button id="processButton" onclick="processInput()">Process Data</button>
             <button id="sortButton" onclick="sortEdges()" disabled>Sort Edges</button>
             
             <div class="run-controls">
-                <button id="prevButton" onclick="prevStep()" disabled>Prev Step</button>
-                <button id="stepButton" onclick="nextStep()" disabled>Next Step</button>
+                <button id="prevButton" onclick="prevStep()" disabled>⏪ Back</button>
+                <button id="stepButton" onclick="nextStep()" disabled>▶️ Next Step</button>
                 <button id="runButton" onclick="toggleAutoRun()" disabled>Auto Run</button>
                 
-                <button id="resetStepsButton" onclick="resetSteps()" disabled>Reset Steps</button>
-                <button id="clearGraphButton" onclick="clearGraph()">Clear Graph</button>
+                <button id="resetStepsButton" onclick="resetSteps()" disabled>🔄 Reset Steps</button>
+                <button id="clearGraphButton" onclick="clearGraph()">🗑️ Clear All</button>
                 
                 <div class="speed-control">
-                    <label for="speedSlider">Speed (ms):</label>
+                    <label for="speedSlider">Speed:</label>
                     <input type="range" id="speedSlider" min="100" max="2000" value="500" onchange="updateSpeedDisplay(this.value)">
                     <span id="speedDisplay">500</span> ms
                 </div>
@@ -42,19 +44,19 @@
         <section id="visualization-area" class="panel">
             <h2>Graph Visualization</h2>
             <div id="graph-container">
-                <p>The graph will appear here after you enter the data.</p>
+                <p>Graph will be displayed here after data import.</p>
             </div>
         </section>
 
         <section id="data-list-area" class="panel">
-            <h2>Edge List</h2>
+            <h2>Edge List (Sorted)</h2>
             <div class="scroll-container">
                 <table id="edgeTable">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Edge (u, v)</th>
-                            <th>Weight (W)</th>
+                            <th>W</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -68,11 +70,11 @@
             <h2>DSU Status & Log</h2>
             
             <div class="dsu-wrapper">
-                <h3>Disjoint Set (Parent)</h3>
+                <h3>Set Status (Parent Array)</h3>
                 <div class="scroll-container">
                     <table id="dsuTable">
                         <thead>
-                            <tr><th>Node</th><th>Root</th></tr>
+                            <tr><th>Node</th><th>Root (Parent)</th></tr>
                         </thead>
                         <tbody></tbody>
                     </table>
@@ -81,7 +83,7 @@
             
             <h3>Activity Log</h3>
             <div id="messageLog">
-                <p>Please import the input file to begin.</p>
+                <p>Welcome! Please import an input file to start.</p>
             </div>
         </section>
     </main>
