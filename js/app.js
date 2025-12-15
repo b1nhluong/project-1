@@ -112,7 +112,7 @@ function toggleAutoRun() {
     } else {
         if (currentStep >= allKruskalSteps.length) return;
         isAutoRunning = true;
-        document.getElementById('runButton').textContent = '⏸️ Tạm Dừng';
+        document.getElementById('runButton').textContent = 'Stop';
         document.getElementById('stepButton').disabled = true;
         document.getElementById('prevButton').disabled = true;
         autoRunInterval = setInterval(nextStep, speed);
@@ -122,7 +122,7 @@ function toggleAutoRun() {
 function stopAutoRun() {
     isAutoRunning = false;
     clearInterval(autoRunInterval);
-    document.getElementById('runButton').textContent = '▶️ Tự động Chạy';
+    document.getElementById('runButton').textContent = 'Auto run';
     if (currentStep < allKruskalSteps.length) document.getElementById('stepButton').disabled = false;
     if (currentStep > 1) document.getElementById('prevButton').disabled = false;
 }
@@ -158,7 +158,7 @@ function clearGraph(resetInput = true) {
     
     document.getElementById('edgeTable').getElementsByTagName('tbody')[0].innerHTML = '';
     document.getElementById('dsuTable').getElementsByTagName('tbody')[0].innerHTML = '';
-    document.getElementById('graph-container').innerHTML = '<p>Đồ thị sẽ hiển thị ở đây sau khi nhập dữ liệu.</p>';
+    document.getElementById('graph-container').innerHTML = '<p>The graph will appear here after you enter the data.</p>';
     
     if (resetInput) {
         window.fileContent = null;
@@ -173,7 +173,7 @@ function clearGraph(resetInput = true) {
     document.getElementById('prevButton').disabled = true;
     document.getElementById('resetStepsButton').disabled = true;
     
-    if(resetInput) logMessage('Đã xóa toàn bộ dữ liệu.', 'info');
+    if(resetInput) logMessage('Deleted all the data.', 'info');
 }
 
 /* --- CẬP NHẬT GIAO DIỆN --- */
@@ -190,13 +190,13 @@ function updateInterface(state) {
         if (row) {
             if (state.status === 'SELECTED') {
                 row.className = 'edge-selected';
-                row.cells[3].textContent = 'Đã chọn';
+                row.cells[3].textContent = 'selected';
             } else if (state.status === 'REJECTED') {
                 row.className = 'edge-rejected';
-                row.cells[3].textContent = 'Loại bỏ';
+                row.cells[3].textContent = 'rejected';
             } else if (state.status === 'EXAMINING') {
                 row.className = 'edge-examining';
-                row.cells[3].textContent = 'Đang xét...';
+                row.cells[3].textContent = 'examining';
                 row.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
