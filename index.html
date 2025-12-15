@@ -11,26 +11,26 @@
 <body>
 
     <header>
-        <h1>🌟 Thuật Toán Kruskal Trực Quan Hóa</h1>
+        <h1>Kruskal's Algorithm Visualization</h1>
         <div id="controls">
             <label class="file-input-label">
                 <input type="file" id="fileInput" accept=".txt" onchange="handleFileSelect()">
-                <span>📥 Import Input</span>
+                <span>Import Input</span>
             </label>
             
-            <button id="processButton" onclick="processInput()">Xử lý Dữ liệu</button>
-            <button id="sortButton" onclick="sortEdges()" disabled>Sắp xếp Cạnh</button>
+            <button id="processButton" onclick="processInput()">Process Data</button>
+            <button id="sortButton" onclick="sortEdges()" disabled>Sort Edges</button>
             
             <div class="run-controls">
-                <button id="prevButton" onclick="prevStep()" disabled>⏪ Return</button>
-                <button id="stepButton" onclick="nextStep()" disabled>▶️ Next</button>
-                <button id="runButton" onclick="toggleAutoRun()" disabled>Auto</button>
+                <button id="prevButton" onclick="prevStep()" disabled>Prev Step</button>
+                <button id="stepButton" onclick="nextStep()" disabled>Next Step</button>
+                <button id="runButton" onclick="toggleAutoRun()" disabled>Auto Run</button>
                 
-                <button id="resetStepsButton" onclick="resetSteps()" disabled>🔄 Reset</button>
-                <button id="clearGraphButton" onclick="clearGraph()">🗑️ Delete all</button>
+                <button id="resetStepsButton" onclick="resetSteps()" disabled>Reset Steps</button>
+                <button id="clearGraphButton" onclick="clearGraph()">Clear Graph</button>
                 
                 <div class="speed-control">
-                    <label for="speedSlider">Tốc độ:</label>
+                    <label for="speedSlider">Speed (ms):</label>
                     <input type="range" id="speedSlider" min="100" max="2000" value="500" onchange="updateSpeedDisplay(this.value)">
                     <span id="speedDisplay">500</span> ms
                 </div>
@@ -40,22 +40,22 @@
 
     <main class="container">
         <section id="visualization-area" class="panel">
-            <h2>Đồ Thị (Graph)</h2>
+            <h2>Graph Visualization</h2>
             <div id="graph-container">
-                <p>Đồ thị sẽ hiển thị ở đây sau khi nhập dữ liệu.</p>
+                <p>The graph will appear here after you enter the data.</p>
             </div>
         </section>
 
         <section id="data-list-area" class="panel">
-            <h2>Danh sách Cạnh (Đã sắp xếp)</h2>
+            <h2>Edge List</h2>
             <div class="scroll-container">
                 <table id="edgeTable">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Cạnh (u, v)</th>
-                            <th>W</th>
-                            <th>Trạng thái</th>
+                            <th>Edge (u, v)</th>
+                            <th>Weight (W)</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,23 +65,23 @@
         </section>
 
         <section id="log-area" class="panel">
-            <h2>Trạng thái DSU & Log</h2>
+            <h2>DSU Status & Log</h2>
             
             <div class="dsu-wrapper">
-                <h3>Trạng thái Tập hợp (Parent)</h3>
+                <h3>Disjoint Set (Parent)</h3>
                 <div class="scroll-container">
                     <table id="dsuTable">
                         <thead>
-                            <tr><th>Đỉnh</th><th>Gốc (Root)</th></tr>
+                            <tr><th>Node</th><th>Root</th></tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
             
-            <h3>Log Hoạt động</h3>
+            <h3>Activity Log</h3>
             <div id="messageLog">
-                <p>Chào mừng! Hãy import file input để bắt đầu.</p>
+                <p>Please import the input file to begin.</p>
             </div>
         </section>
     </main>
