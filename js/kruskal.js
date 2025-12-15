@@ -1,5 +1,5 @@
 /**
- * Lớp DSU (Disjoint Set Union)
+ * DSU Class (Disjoint Set Union)
  */
 class DSU {
     constructor(n) {
@@ -35,12 +35,12 @@ class DSU {
 }
 
 /**
- * Logic chính của thuật toán Kruskal
+ * Kruskal's Algorithm Logic
  */
 function setupKruskalSteps(N, edges) {
     if (N <= 0 || edges.length === 0) return { steps: [], sortedEdges: [] };
 
-    // 1. Sắp xếp cạnh
+    // 1. Sort edges
     let sortedEdges = [...edges].sort((a, b) => a.weight - b.weight);
     sortedEdges = sortedEdges.map((edge, index) => ({ ...edge, id: index + 1 }));
 
@@ -48,27 +48,27 @@ function setupKruskalSteps(N, edges) {
     let mstEdges = [];
     let allSteps = [];
 
-    // Bước khởi tạo
+    // Initial Step
     allSteps.push({ 
         edgeIndex: -1, 
         edgeInfo: null,
         dsuSnapshot: dsu.getSnapshot(),
-        log: `Bắt đầu. Đồ thị có ${N} đỉnh, ${sortedEdges.length} cạnh.`,
+        log: `Algorithm Started. Graph has ${N} nodes and ${sortedEdges.length} edges.`,
         status: 'INITIAL' 
     });
 
-    // 2. Duyệt qua từng cạnh
+    // 2. Iterate through sorted edges
     for (let i = 0; i < sortedEdges.length; i++) {
         const edge = sortedEdges[i];
         const { u, v, weight } = edge;
 
-        // Trạng thái: Đang xem xét
+        // Status: Examining
         allSteps.push({ 
             edgeIndex: i, 
             edgeInfo: edge,
             dsuSnapshot: dsu.getSnapshot(),
-            mstEdges: [...mstEdges], // Giữ nguyên danh sách MST hiện tại
-            log: `Đang xét cạnh [${edge.id}] (${u}, ${v}), w=${weight}.`,
+            mstEdges: [...mstEdges], 
+            log: `Examining edge [${edge.id}] (${u}, ${v}), weight=${weight}.`,
             status: 'EXAMINING'
         });
 
@@ -79,14 +79,14 @@ function setupKruskalSteps(N, edges) {
         if (rootU !== rootV) {
             dsu.union(u, v);
             mstEdges.push(edge);
-            statusLog = `CHẤP NHẬN cạnh (${u}, ${v}). Hợp nhất tập hợp ${rootU} và ${rootV}.`;
+            statusLog = `ACCEPTED edge (${u}, ${v}). Merging sets ${rootU} and ${rootV}.`;
             stepStatus = 'SELECTED';
         } else {
-            statusLog = `LOẠI BỎ cạnh (${u}, ${v}). Tạo chu trình (cùng gốc ${rootU}).`;
+            statusLog = `REJECTED edge (${u}, ${v}). Creates cycle (same root ${rootU}).`;
             stepStatus = 'REJECTED';
         }
 
-        // Trạng thái: Sau khi quyết định
+        // Status: After Decision
         allSteps.push({ 
             edgeIndex: i, 
             edgeInfo: edge,
@@ -99,13 +99,13 @@ function setupKruskalSteps(N, edges) {
         if (mstEdges.length === N - 1) break; 
     }
 
-    // Bước hoàn tất
+    // Final Step
     allSteps.push({
         edgeIndex: -1,
         edgeInfo: null,
         dsuSnapshot: dsu.getSnapshot(),
         mstEdges: [...mstEdges],
-        log: `HOÀN THÀNH. Tổng trọng số MST: ${mstEdges.reduce((acc, e) => acc + e.weight, 0)}.`,
+        log: `FINISHED. Total MST Weight: ${mstEdges.reduce((acc, e) => acc + e.weight, 0)}.`,
         status: 'FINAL'
     });
 
