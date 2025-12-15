@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô Hình Kruskal Trực Quan</title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>🌟 Thuật Toán Kruskal Trực Quan Hóa</h1>
+        <div id="controls">
+            <label class="file-input-label">
+                <input type="file" id="fileInput" accept=".txt" onchange="handleFileSelect()">
+                <span>📥 Import Input</span>
+            </label>
+            
+            <button id="processButton" onclick="processInput()">Xử lý Dữ liệu</button>
+            <button id="sortButton" onclick="sortEdges()" disabled>Sắp xếp Cạnh</button>
+            
+            <div class="run-controls">
+                <button id="prevButton" onclick="prevStep()" disabled>⏪ Return</button>
+                <button id="stepButton" onclick="nextStep()" disabled>▶️ Next</button>
+                <button id="runButton" onclick="toggleAutoRun()" disabled>Auto</button>
+                
+                <button id="resetStepsButton" onclick="resetSteps()" disabled>🔄 Reset</button>
+                <button id="clearGraphButton" onclick="clearGraph()">🗑️ Delete all</button>
+                
+                <div class="speed-control">
+                    <label for="speedSlider">Tốc độ:</label>
+                    <input type="range" id="speedSlider" min="100" max="2000" value="500" onchange="updateSpeedDisplay(this.value)">
+                    <span id="speedDisplay">500</span> ms
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="visualization-area" class="panel">
+            <h2>Đồ Thị (Graph)</h2>
+            <div id="graph-container">
+                <p>Đồ thị sẽ hiển thị ở đây sau khi nhập dữ liệu.</p>
+            </div>
+        </section>
+
+        <section id="data-list-area" class="panel">
+            <h2>Danh sách Cạnh (Đã sắp xếp)</h2>
+            <div class="scroll-container">
+                <table id="edgeTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cạnh (u, v)</th>
+                            <th>W</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="log-area" class="panel">
+            <h2>Trạng thái DSU & Log</h2>
+            
+            <div class="dsu-wrapper">
+                <h3>Trạng thái Tập hợp (Parent)</h3>
+                <div class="scroll-container">
+                    <table id="dsuTable">
+                        <thead>
+                            <tr><th>Đỉnh</th><th>Gốc (Root)</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <h3>Log Hoạt động</h3>
+            <div id="messageLog">
+                <p>Chào mừng! Hãy import file input để bắt đầu.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/kruskal.js"></script>
+    <script src="js/visualization.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
