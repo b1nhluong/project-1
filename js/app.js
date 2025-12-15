@@ -1,3 +1,4 @@
+// Globals
 let currentStep = 0;
 let allKruskalSteps = [];
 let graphData = { N: 0, M: 0, edges: [] };
@@ -14,7 +15,12 @@ function updateSpeedDisplay(val) {
     }
 }
 
-/* --- XỬ LÝ FILE --- */
+/* --- FILE INPUT LOGIC --- */
+function triggerFileInput() {
+    document.getElementById('fileInput').click();
+}
+
+/* --- FILE PROCESSING --- */
 function handleFileSelect() {
     const file = document.getElementById('fileInput').files[0];
     if (file) {
@@ -22,25 +28,28 @@ function handleFileSelect() {
         reader.onload = (e) => {
             window.fileContent = e.target.result;
             document.getElementById('processButton').disabled = false;
-            logMessage(`Đã tải file: ${file.name}`, 'info');
+            logMessage(`File loaded: ${file.name}`, 'info');
         };
         reader.readAsText(file);
     }
 }
 
 function processInput() {
-    clearGraph(false); // Reset nhưng giữ input
+    clearGraph(false); 
+
     if (!window.fileContent) return;
 
     const lines = window.fileContent.trim().split('\n').filter(l => l.trim());
     const [N, M] = lines[0].trim().split(/\s+/).map(Number);
     
-    if (!N || N <= 0) { logMessage('Lỗi: Số đỉnh N không hợp lệ.', 'error'); return; }
+    if (!N || N <= 0) { logMessage('Error: Invalid number of nodes (N).', 'error'); return; }
 
     const edges = [];
     for (let i = 1; i < lines.length; i++) {
         const [u, v, w] = lines[i].trim().split(/\s+/).map(Number);
-        if (u && v && !isNaN(w)) edges.push({ u, v, weight: w });
+        if (u && v && !isNaN(w) && u >= 1 && v >= 1 && u <= N && v <= N) { 
+            edges.push({ u, v, weight: w });
+        }
     }
 
     graphData = { N, M, edges };
@@ -48,7 +57,7 @@ function processInput() {
     
     document.getElementById('sortButton').disabled = false;
     document.getElementById('processButton').disabled = true;
-    logMessage(`Dữ liệu OK: ${N} đỉnh, ${edges.length} cạnh.`, 'success');
+    logMessage(`Data OK: ${N} nodes, ${edges.length} edges.`, 'success');
 }
 
 function sortEdges() {
@@ -57,7 +66,7 @@ function sortEdges() {
     const res = setupKruskalSteps(graphData.N, graphData.edges);
     allKruskalSteps = res.steps;
     
-    // Render bảng cạnh
+    // Render Edge Table
     const tbody = document.getElementById('edgeTable').getElementsByTagName('tbody')[0];
     tbody.innerHTML = '';
     res.sortedEdges.forEach(e => {
@@ -71,12 +80,13 @@ function sortEdges() {
     document.getElementById('runButton').disabled = false;
     document.getElementById('resetStepsButton').disabled = false;
     
-    logMessage('Đã sắp xếp cạnh. Sẵn sàng chạy.', 'success');
+    logMessage('Edges sorted. Ready to run.', 'success');
 }
 
-/* --- ĐIỀU KHIỂN CHẠY --- */
+/* --- CONTROLS --- */
 function nextStep() {
     if (currentStep >= allKruskalSteps.length) {
+        logMessage('Kruskal algorithm finished.', 'info');
         stopAutoRun();
         document.getElementById('stepButton').disabled = true;
         return;
@@ -93,14 +103,12 @@ function prevStep() {
     if (currentStep <= 1) return;
     stopAutoRun();
 
-    // Logic lùi bước: currentStep đang trỏ vào bước "sắp tới".
-    // Cần lùi về bước hiện tại (-1), rồi lùi về bước trước đó (-1) => Trừ 2.
     currentStep -= 2;
     
     const state = allKruskalSteps[currentStep];
     updateInterface(state);
     
-    currentStep++; // Chuẩn bị cho nextStep
+    currentStep++; 
     
     document.getElementById('stepButton').disabled = false;
     document.getElementById('prevButton').disabled = (currentStep <= 1);
@@ -109,10 +117,11 @@ function prevStep() {
 function toggleAutoRun() {
     if (isAutoRunning) {
         stopAutoRun();
+        document.getElementById('runButton').textContent = 'Auto Run';
     } else {
         if (currentStep >= allKruskalSteps.length) return;
         isAutoRunning = true;
-        document.getElementById('runButton').textContent = 'Stop';
+        document.getElementById('runButton').textContent = 'Pause';
         document.getElementById('stepButton').disabled = true;
         document.getElementById('prevButton').disabled = true;
         autoRunInterval = setInterval(nextStep, speed);
@@ -122,35 +131,33 @@ function toggleAutoRun() {
 function stopAutoRun() {
     isAutoRunning = false;
     clearInterval(autoRunInterval);
-    document.getElementById('runButton').textContent = 'Auto run';
+    document.getElementById('runButton').textContent = 'Auto Run';
     if (currentStep < allKruskalSteps.length) document.getElementById('stepButton').disabled = false;
     if (currentStep > 1) document.getElementById('prevButton').disabled = false;
 }
 
-/* --- CÁC HÀM RESET --- */
 
-// 1. Chỉ đặt lại quá trình chạy (giữ nguyên đồ thị)
+/* --- RESET FUNCTIONS --- */
+
 function resetSteps() {
     stopAutoRun();
     currentStep = 0;
     
     if (allKruskalSteps.length > 0) {
-        // Reset bảng
         const tbody = document.getElementById('edgeTable').getElementsByTagName('tbody')[0];
-        Array.from(tbody.rows).forEach(r => { r.className = ''; r.cells[3].textContent = '-'; });
+        Array.from(tbody.rows).forEach(r => { r.classList.remove('edge-selected', 'edge-rejected', 'edge-examining'); r.cells[3].textContent = '-'; });
         
-        // Hiển thị bước 0 (Initial)
         updateInterface(allKruskalSteps[0]);
-        currentStep = 1;
+        currentStep = 1; 
+
+        logMessage('Progress reset.', 'info');
         
         document.getElementById('stepButton').disabled = false;
         document.getElementById('runButton').disabled = false;
         document.getElementById('prevButton').disabled = true;
-        logMessage('Đã đặt lại quá trình chạy.', 'info');
     }
 }
 
-// 2. Xóa toàn bộ dữ liệu và đồ thị
 function clearGraph(resetInput = true) {
     stopAutoRun();
     currentStep = 0;
@@ -158,7 +165,7 @@ function clearGraph(resetInput = true) {
     
     document.getElementById('edgeTable').getElementsByTagName('tbody')[0].innerHTML = '';
     document.getElementById('dsuTable').getElementsByTagName('tbody')[0].innerHTML = '';
-    document.getElementById('graph-container').innerHTML = '<p>The graph will appear here after you enter the data.</p>';
+    document.getElementById('graph-container').innerHTML = '<p>Graph will be displayed here after data import.</p>';
     
     if (resetInput) {
         window.fileContent = null;
@@ -173,36 +180,36 @@ function clearGraph(resetInput = true) {
     document.getElementById('prevButton').disabled = true;
     document.getElementById('resetStepsButton').disabled = true;
     
-    if(resetInput) logMessage('Deleted all the data.', 'info');
+    if(resetInput) logMessage('All data cleared.', 'info');
 }
 
-/* --- CẬP NHẬT GIAO DIỆN --- */
+/* --- UI UPDATE --- */
 function updateInterface(state) {
     // 1. Log
     logMessage(state.log, state.status === 'SELECTED' ? 'success' : (state.status === 'REJECTED' ? 'error' : 'info'));
     
-    // 2. Bảng Cạnh (Highlight hàng)
+    // 2. Edge Table (Highlight row)
     const tbody = document.getElementById('edgeTable').getElementsByTagName('tbody')[0];
-    Array.from(tbody.rows).forEach(r => r.classList.remove('edge-examining')); // Xóa highlight 'đang xét' cũ
+    Array.from(tbody.rows).forEach(r => r.classList.remove('edge-examining')); 
     
     if (state.edgeInfo) {
         const row = document.getElementById(`edge-row-${state.edgeInfo.id}`);
         if (row) {
             if (state.status === 'SELECTED') {
                 row.className = 'edge-selected';
-                row.cells[3].textContent = 'selected';
+                row.cells[3].textContent = 'Selected';
             } else if (state.status === 'REJECTED') {
                 row.className = 'edge-rejected';
-                row.cells[3].textContent = 'rejected';
+                row.cells[3].textContent = 'Rejected';
             } else if (state.status === 'EXAMINING') {
-                row.className = 'edge-examining';
-                row.cells[3].textContent = 'examining';
+                row.classList.add('edge-examining');
+                row.cells[3].textContent = 'Examining...';
                 row.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
     }
 
-    // 3. Bảng DSU
+    // 3. DSU Table
     if (state.dsuSnapshot) {
         const dsuBody = document.getElementById('dsuTable').getElementsByTagName('tbody')[0];
         dsuBody.innerHTML = '';
@@ -214,7 +221,7 @@ function updateInterface(state) {
         });
     }
 
-    // 4. Vẽ đồ thị
+    // 4. Graph Vis
     updateGraphVisualization(state);
 }
 
