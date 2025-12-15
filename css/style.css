@@ -1,11 +1,11 @@
-/* Thiết lập cơ bản */
+/* Basic Setup */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f7f9;
     color: #333;
-    height: 100vh; /* Chiều cao cố định bằng màn hình */
+    height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -15,32 +15,43 @@ header {
     color: white;
     padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    flex-shrink: 0; /* Không cho phép header co lại */
+    flex-shrink: 0;
 }
 
 h1 { margin: 0 0 10px 0; font-size: 1.5em; }
 
-/* Khu vực điều khiển */
+/* Control Area */
 #controls {
     display: flex;
-    gap: 10px;
+    gap: 8px; /* Giảm khoảng cách chút cho gọn */
     align-items: center;
     flex-wrap: wrap;
 }
 
-button, .file-input-label span {
-    padding: 8px 12px;
+/* --- [UPDATED] Button Style: Compact & Fit Content --- */
+#controls button {
+    /* Loại bỏ việc nút tự giãn to */
+    flex-grow: 0; 
+    flex-shrink: 0;
+    width: auto; /* Chiều rộng tự động theo chữ */
+    min-width: 0;
+    
+    /* Styling */
+    padding: 6px 16px; /* Padding vừa đủ để nút đẹp */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
     font-size: 0.9em;
     transition: all 0.2s;
-    color: white;
+    color: white; 
+    height: 36px; /* Chiều cao cố định nhỏ gọn */
+    line-height: 24px;
+    white-space: nowrap; /* Không xuống dòng chữ trong nút */
 }
 
-/* Màu nút */
-.file-input-label span { background-color: #8e44ad; }
+/* Button Colors */
+#importButton { background-color: #8e44ad; } 
 #processButton { background-color: #2980b9; }
 #sortButton { background-color: #27ae60; }
 #prevButton { background-color: #7f8c8d; }
@@ -52,22 +63,18 @@ button, .file-input-label span {
 button:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
 button:disabled { background-color: #bdc3c7 !important; cursor: not-allowed; transform: none; }
 
-.file-input-label { position: relative; overflow: hidden; display: inline-block; }
-.file-input-label input[type="file"] { position: absolute; top: 0; right: 0; min-width: 100%; min-height: 100%; opacity: 0; cursor: pointer; }
-
 .run-controls { display: flex; gap: 5px; align-items: center; margin-left: auto; }
 .speed-control { display: flex; align-items: center; gap: 5px; font-size: 0.9em; color: #ecf0f1; margin-left: 10px;}
 
-/* Cấu trúc 3 cột chính */
+/* Main Layout (3 Columns) */
 .container {
     display: flex;
     padding: 15px;
     gap: 15px;
-    flex: 1; /* Chiếm toàn bộ phần còn lại dưới header */
-    overflow: hidden; /* Ngăn cuộn trang chính */
+    flex: 1;
+    overflow: hidden;
 }
 
-/* Class Panel chung cho các cột */
 .panel {
     background-color: white;
     padding: 10px;
@@ -75,10 +82,9 @@ button:disabled { background-color: #bdc3c7 !important; cursor: not-allowed; tra
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Panel không cuộn, chỉ nội dung bên trong cuộn */
+    overflow: hidden;
 }
 
-/* Tiêu đề cột */
 h2, h3 { 
     margin-top: 0; 
     color: #2c3e50; 
@@ -88,34 +94,32 @@ h2, h3 {
 }
 h3 { font-size: 1em; margin-top: 5px; margin-bottom: 5px;}
 
-/* Layout các cột */
+/* Column Sizes */
 #visualization-area { flex: 3; min-width: 400px; }
 #data-list-area { flex: 1.5; min-width: 300px; }
 #log-area { flex: 1.5; min-width: 300px; }
 
-/* Container cho Đồ thị */
 #graph-container {
-    flex: 1; /* Chiếm hết chiều cao panel */
+    flex: 1;
     border: 1px solid #eee;
     border-radius: 4px;
     background-color: #fff;
-    min-height: 400px; /* Đảm bảo Vis.js có chỗ để vẽ */
+    min-height: 400px; 
     position: relative;
 }
 
-/* [QUAN TRỌNG] Container cuộn cho bảng */
+/* Scroll Container for Tables */
 .scroll-container {
-    flex: 1; /* Chiếm hết không gian còn lại */
-    overflow-y: auto; /* Hiện thanh cuộn dọc */
+    flex: 1;
+    overflow-y: auto;
     border: 1px solid #eee;
     position: relative;
 }
 
-/* Định dạng Bảng */
 table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
 th, td { border-bottom: 1px solid #eee; padding: 6px; text-align: center; }
 
-/* Sticky Header cho bảng */
+/* Sticky Header */
 th { 
     background-color: #f8f9fa; 
     position: sticky; 
@@ -124,17 +128,16 @@ th {
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* Highlight các dòng */
+/* Row Highlights */
 .edge-selected { background-color: #d5f5e3; font-weight: bold; border-left: 4px solid #2ecc71; }
 .edge-examining { background-color: #fcf3cf; border-left: 4px solid #f1c40f; }
-.edge-rejected { background-color: #fadbd8; color: #999; text-decoration: line-through; }
+.edge-rejected { background-color: #fadbd8; color: #999; text-decoration: none; }
 
-/* Phần DSU & Log */
 .dsu-wrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 0; /* Cho phép co nhỏ trong flex container */
+    min-height: 0; 
     margin-bottom: 10px;
 }
 
