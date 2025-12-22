@@ -1,12 +1,8 @@
-// Globals
 let network = null;
 let graphNodes = null;
 let graphEdges = null;
 let initialEdges = []; 
 
-/**
- * Draw Initial Graph from Data
- */
 function drawInitialGraph(data) {
     const container = document.getElementById('graph-container');
     
@@ -17,12 +13,10 @@ function drawInitialGraph(data) {
 
     container.innerHTML = ''; 
 
-    // Init DataSet
     graphNodes = new vis.DataSet();
     graphEdges = new vis.DataSet();
     initialEdges = [];
 
-    // 1. Create Nodes
     try {
         for (let i = 1; i <= data.N; i++) {
             graphNodes.add({ 
@@ -33,7 +27,6 @@ function drawInitialGraph(data) {
             });
         }
 
-        // 2. Create Edges
         data.edges.forEach((edge, index) => {
             const edgeId = `e${index}`; 
             
@@ -54,7 +47,6 @@ function drawInitialGraph(data) {
         return;
     }
 
-    // 3. Configure Vis.js (OPTIMIZED)
     const options = {
         nodes: { chosen: false },
         edges: { 
@@ -71,7 +63,7 @@ function drawInitialGraph(data) {
             },
             stabilization: {
                 enabled: true,
-                iterations: 1000,
+                iterations: 1000, 
                 updateInterval: 50
             }
         },
@@ -79,9 +71,9 @@ function drawInitialGraph(data) {
             dragNodes: true, 
             zoomView: true,  
             dragView: true,
-            selectable: false, // Disable selection
+            selectable: false, 
             hover: false,      
-            hideEdgesOnDrag: true
+            hideEdgesOnDrag: true 
         },
         layout: {
             randomSeed: 2
@@ -90,7 +82,6 @@ function drawInitialGraph(data) {
 
     network = new vis.Network(container, { nodes: graphNodes, edges: graphEdges }, options);
     
-    // Freeze physics after stabilization
     network.once("stabilizationIterationsDone", function() {
         network.setOptions({ physics: { enabled: false } }); 
         network.fit();
@@ -100,33 +91,49 @@ function drawInitialGraph(data) {
     console.log(`Graph drawn: ${data.N} nodes, ${data.M} edges.`);
 }
 
-/**
- * Update Graph Visualization based on Algorithm State
- */
 function updateGraphVisualization(state) {
     if (!network || !graphNodes || !graphEdges) return;
 
-    // 1. Update Node Colors (DSU)
+    // 1. Update Nodes
+    const nodesUpdate = [];
     const colorPalette = ['#3498db', '#9b59b6', '#e67e22', '#e74c3c', '#1abc9c', '#2ecc71', '#f1c40f', '#34495e'];
+
     if (state.dsuSnapshot) {
-        const nodesUpdate = [];
         state.dsuSnapshot.forEach((root, nodeId) => {
             if (nodeId === 0) return;
             const color = colorPalette[root % colorPalette.length];
-            
             nodesUpdate.push({
                 id: nodeId,
                 color: { background: color, border: color },
                 borderWidth: (root === nodeId) ? 4 : 1
             });
         });
-        graphNodes.update(nodesUpdate);
-    }
+    } else if (state.primSnapshot) {
+        const { visited } = state.primSnapshot;
+        const selectedNode = state.selectedNode;
 
-    // 2. Update Edge Colors
+        for(let i=1; i < visited.length; i++) {
+            let colorObj = { background: '#3498db', border: '#2980b9' }; 
+            let bWidth = 1;
+
+            if (visited[i]) {
+                colorObj = { background: '#2ecc71', border: '#27ae60' }; 
+            }
+            
+            if (selectedNode === i) {
+                colorObj = { background: '#f1c40f', border: '#f39c12' }; 
+                bWidth = 4;
+            }
+
+            nodesUpdate.push({ id: i, color: colorObj, borderWidth: bWidth });
+        }
+    }
+    graphNodes.update(nodesUpdate);
+
+    // 2. Update Edges
     const edgeUpdates = [];
-    
     const mstVisIds = new Set();
+    
     if (state.mstEdges) {
         state.mstEdges.forEach(e => {
             const found = initialEdges.find(ie => 
