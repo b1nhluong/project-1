@@ -23,21 +23,18 @@ h1 { margin: 0 0 10px 0; font-size: 1.5em; }
 /* Control Area */
 #controls {
     display: flex;
-    gap: 8px; /* Giảm khoảng cách chút cho gọn */
+    gap: 8px;
     align-items: center;
     flex-wrap: wrap;
 }
 
-/* --- [UPDATED] Button Style: Compact & Fit Content --- */
+/* Button Style */
 #controls button {
-    /* Loại bỏ việc nút tự giãn to */
     flex-grow: 0; 
     flex-shrink: 0;
-    width: auto; /* Chiều rộng tự động theo chữ */
+    width: auto;
     min-width: 0;
-    
-    /* Styling */
-    padding: 6px 16px; /* Padding vừa đủ để nút đẹp */
+    padding: 6px 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -45,13 +42,49 @@ h1 { margin: 0 0 10px 0; font-size: 1.5em; }
     font-size: 0.9em;
     transition: all 0.2s;
     color: white; 
-    height: 36px; /* Chiều cao cố định nhỏ gọn */
+    height: 36px;
     line-height: 24px;
-    white-space: nowrap; /* Không xuống dòng chữ trong nút */
+    white-space: nowrap;
 }
+
+/* Algorithm Select */
+#algorithmSelect {
+    height: 36px;
+    border-radius: 4px;
+    border: 1px solid #bdc3c7;
+    padding: 0 10px;
+    font-weight: bold;
+    color: #2c3e50;
+    cursor: pointer;
+}
+
+/* Random Input Group */
+.random-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    background: rgba(255,255,255,0.1);
+    padding: 2px;
+    border-radius: 4px;
+}
+
+#nodeCountInput {
+    height: 36px;
+    width: 60px;
+    padding: 0 8px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 0.9em;
+    text-align: center;
+    box-sizing: border-box;
+    font-weight: bold;
+    color: #2c3e50;
+}
+#nodeCountInput:focus { outline: none; border-color: #3498db; }
 
 /* Button Colors */
 #importButton { background-color: #8e44ad; } 
+#randomButton { background-color: #9b59b6; }
 #processButton { background-color: #2980b9; }
 #sortButton { background-color: #27ae60; }
 #prevButton { background-color: #7f8c8d; }
@@ -66,7 +99,7 @@ button:disabled { background-color: #bdc3c7 !important; cursor: not-allowed; tra
 .run-controls { display: flex; gap: 5px; align-items: center; margin-left: auto; }
 .speed-control { display: flex; align-items: center; gap: 5px; font-size: 0.9em; color: #ecf0f1; margin-left: 10px;}
 
-/* Main Layout (3 Columns) */
+/* Main Layout */
 .container {
     display: flex;
     padding: 15px;
@@ -96,7 +129,7 @@ h3 { font-size: 1em; margin-top: 5px; margin-bottom: 5px;}
 
 /* Column Sizes */
 #visualization-area { flex: 3; min-width: 400px; }
-#data-list-area { flex: 1.5; min-width: 300px; }
+#data-list-area { flex: 2; min-width: 300px; } 
 #log-area { flex: 1.5; min-width: 300px; }
 
 #graph-container {
@@ -108,7 +141,7 @@ h3 { font-size: 1em; margin-top: 5px; margin-bottom: 5px;}
     position: relative;
 }
 
-/* Scroll Container for Tables */
+/* Scroll Container */
 .scroll-container {
     flex: 1;
     overflow-y: auto;
@@ -119,7 +152,6 @@ h3 { font-size: 1em; margin-top: 5px; margin-bottom: 5px;}
 table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
 th, td { border-bottom: 1px solid #eee; padding: 6px; text-align: center; }
 
-/* Sticky Header */
 th { 
     background-color: #f8f9fa; 
     position: sticky; 
@@ -128,7 +160,13 @@ th {
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* Row Highlights */
+/* Fixed Column Widths */
+#edgeTable th:nth-child(1) { width: 15%; min-width: 50px; }
+#edgeTable th:nth-child(2) { width: 30%; }
+#edgeTable th:nth-child(3) { width: 15%; min-width: 50px; }
+#edgeTable th:nth-child(4) { width: 40%; min-width: 120px; }
+
+/* Highlights */
 .edge-selected { background-color: #d5f5e3; font-weight: bold; border-left: 4px solid #2ecc71; }
 .edge-examining { background-color: #fcf3cf; border-left: 4px solid #f1c40f; }
 .edge-rejected { background-color: #fadbd8; color: #999; text-decoration: none; }
