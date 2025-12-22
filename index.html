@@ -3,37 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kruskal's Algorithm Visualization</title>
+    <title>Graph Algorithms Visualization</title>
     <link rel="stylesheet" href="css/style.css">
-    
     <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
 </head>
 <body>
 
     <header>
-        <h1>🌟 Kruskal's Algorithm Visualization</h1>
+        <h1>Graph Algorithms Visualization</h1>
         <div id="controls">
             
-            <button id="importButton" onclick="triggerFileInput()">
-                📥 Import Input
-            </button>
-            
+            <div class="algo-select-group">
+                <select id="algorithmSelect" onchange="resetSteps()">
+                    <option value="kruskal">Kruskal's Algorithm</option>
+                    <option value="prim">Prim's Algorithm</option>
+                </select>
+            </div>
+
+            <button id="importButton" onclick="triggerFileInput()">Import File</button>
             <input type="file" id="fileInput" accept=".txt" onchange="handleFileSelect()" style="display: none;">
             
+            <div class="random-group">
+                <input type="number" id="nodeCountInput" placeholder="N" value="50" min="2" max="1000">
+                <button id="randomButton" onclick="generateAndLoad()">Random</button>
+            </div>
+
             <button id="processButton" onclick="processInput()">Process Data</button>
-            <button id="sortButton" onclick="sortEdges()" disabled>Sort Edges</button>
+            <button id="sortButton" onclick="prepareAlgorithm()" disabled>Prepare / Sort</button>
             
             <div class="run-controls">
-                <button id="prevButton" onclick="prevStep()" disabled>⏪ Back</button>
-                <button id="stepButton" onclick="nextStep()" disabled>▶️ Next Step</button>
+                <button id="prevButton" onclick="prevStep()" disabled>Back</button>
+                <button id="stepButton" onclick="nextStep()" disabled>Next Step</button>
                 <button id="runButton" onclick="toggleAutoRun()" disabled>Auto Run</button>
                 
-                <button id="resetStepsButton" onclick="resetSteps()" disabled>🔄 Reset Steps</button>
-                <button id="clearGraphButton" onclick="clearGraph()">🗑️ Clear All</button>
+                <button id="resetStepsButton" onclick="resetSteps()" disabled>Reset</button>
+                <button id="clearGraphButton" onclick="clearGraph()">Clear All</button>
                 
                 <div class="speed-control">
                     <label for="speedSlider">Speed:</label>
-                    <input type="range" id="speedSlider" min="100" max="2000" value="500" onchange="updateSpeedDisplay(this.value)">
+                    <input type="range" id="speedSlider" min="50" max="2000" value="500" onchange="updateSpeedDisplay(this.value)">
                     <span id="speedDisplay">500</span> ms
                 </div>
             </div>
@@ -44,12 +52,12 @@
         <section id="visualization-area" class="panel">
             <h2>Graph Visualization</h2>
             <div id="graph-container">
-                <p>Graph will be displayed here after data import.</p>
+                <p>Graph will be displayed here.</p>
             </div>
         </section>
 
         <section id="data-list-area" class="panel">
-            <h2>Edge List (Sorted)</h2>
+            <h2>Edge List</h2>
             <div class="scroll-container">
                 <table id="edgeTable">
                     <thead>
@@ -60,20 +68,19 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </section>
 
         <section id="log-area" class="panel">
-            <h2>DSU Status & Log</h2>
+            <h2 id="statusTableTitle">Algorithm State</h2>
             
             <div class="dsu-wrapper">
-                <h3>Set Status (Parent Array)</h3>
+                <h3 id="subTableTitle">Set Status</h3>
                 <div class="scroll-container">
                     <table id="dsuTable">
-                        <thead>
+                        <thead id="statusTableHead">
                             <tr><th>Node</th><th>Root (Parent)</th></tr>
                         </thead>
                         <tbody></tbody>
@@ -83,12 +90,13 @@
             
             <h3>Activity Log</h3>
             <div id="messageLog">
-                <p>Welcome! Please import an input file to start.</p>
+                <p>Welcome. Please import or generate a graph.</p>
             </div>
         </section>
     </main>
 
     <script src="js/kruskal.js"></script>
+    <script src="js/prim.js"></script>
     <script src="js/visualization.js"></script>
     <script src="js/app.js"></script>
 </body>
