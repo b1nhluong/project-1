@@ -1,6 +1,3 @@
-/**
- * DSU Class (Disjoint Set Union)
- */
 class DSU {
     constructor(n) {
         this.parent = Array(n + 1).fill(0).map((_, i) => i); 
@@ -9,7 +6,7 @@ class DSU {
 
     find(i) {
         if (this.parent[i] === i) return i;
-        this.parent[i] = this.find(this.parent[i]); // Path compression
+        this.parent[i] = this.find(this.parent[i]); 
         return this.parent[i];
     }
 
@@ -34,13 +31,9 @@ class DSU {
     getSnapshot() { return [...this.parent]; }
 }
 
-/**
- * Kruskal's Algorithm Logic
- */
 function setupKruskalSteps(N, edges) {
     if (N <= 0 || edges.length === 0) return { steps: [], sortedEdges: [] };
 
-    // 1. Sort edges
     let sortedEdges = [...edges].sort((a, b) => a.weight - b.weight);
     sortedEdges = sortedEdges.map((edge, index) => ({ ...edge, id: index + 1 }));
 
@@ -48,7 +41,6 @@ function setupKruskalSteps(N, edges) {
     let mstEdges = [];
     let allSteps = [];
 
-    // Initial Step
     allSteps.push({ 
         edgeIndex: -1, 
         edgeInfo: null,
@@ -57,12 +49,10 @@ function setupKruskalSteps(N, edges) {
         status: 'INITIAL' 
     });
 
-    // 2. Iterate through sorted edges
     for (let i = 0; i < sortedEdges.length; i++) {
         const edge = sortedEdges[i];
         const { u, v, weight } = edge;
 
-        // Status: Examining
         allSteps.push({ 
             edgeIndex: i, 
             edgeInfo: edge,
@@ -86,7 +76,6 @@ function setupKruskalSteps(N, edges) {
             stepStatus = 'REJECTED';
         }
 
-        // Status: After Decision
         allSteps.push({ 
             edgeIndex: i, 
             edgeInfo: edge,
@@ -99,7 +88,6 @@ function setupKruskalSteps(N, edges) {
         if (mstEdges.length === N - 1) break; 
     }
 
-    // Final Step
     allSteps.push({
         edgeIndex: -1,
         edgeInfo: null,
